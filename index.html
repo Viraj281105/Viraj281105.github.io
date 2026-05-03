@@ -659,12 +659,12 @@
     .profile-card-outer {
       perspective: 1200px;
       width: 100%;
-      min-height: 380px;
+      height: 420px;
     }
 
     .profile-card-3d {
       width: 100%;
-      min-height: 380px;
+      height: 420px;
       position: relative;
       transform-style: preserve-3d;
       transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
@@ -697,7 +697,14 @@
       border-color: rgba(139,92,246,0.3);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
+      gap: 0.6rem;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .card-back::-webkit-scrollbar {
+      display: none;
     }
 
     /* Avatar with real image */
@@ -919,7 +926,7 @@
           <div class="card-face card-back">
             <div>
               <div class="back-title">✦ By The Numbers</div>
-              <div class="back-stat-grid">
+              <div class="back-stat-grid" style="margin:0.4rem 0">
                 <div class="back-stat">
                   <div class="back-stat-num">9.136</div>
                   <div class="back-stat-label">CGPA / 10</div>
@@ -940,7 +947,7 @@
             </div>
 
             <div>
-              <div class="back-title" style="margin-top:0.5rem">✦ Core Stack</div>
+              <div class="back-title">✦ Core Stack</div>
               <div class="back-tag-row">
                 <span class="tech-badge">LangGraph</span>
                 <span class="tech-badge">DoWhy</span>
@@ -954,13 +961,13 @@
             </div>
 
             <div>
-              <div class="back-title" style="margin-top:0.8rem">✦ Open For</div>
+              <div class="back-title">✦ Open For</div>
               <div style="display:flex;flex-direction:column;gap:0.4rem">
                 <div style="font-size:0.8rem;color:var(--text-secondary)"><span style="color:var(--accent-green)">▸</span> AI/ML Internships</div>
                 <div style="font-size:0.8rem;color:var(--text-secondary)"><span style="color:var(--accent-green)">▸</span> SWE / MLE Roles</div>
                 <div style="font-size:0.8rem;color:var(--text-secondary)"><span style="color:var(--accent-green)">▸</span> Research Collaborations</div>
               </div>
-              <a href="mailto:viraj.jadhao28@gmail.com" style="display:inline-block;margin-top:1rem;background:var(--gradient-1);padding:0.5rem 1.2rem;border-radius:40px;font-size:0.8rem;font-weight:600;color:white;text-decoration:none">
+              <a href="mailto:viraj.jadhao28@gmail.com" style="display:inline-block;margin-top:0.5rem;color:var(--accent-primary);font-size:0.85rem;font-weight:500" class="btn-outline">
                 Get in Touch →
               </a>
             </div>
