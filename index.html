@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Viraj Jadhao · AI Systems Architect</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -80,6 +80,7 @@
       top: 0;
       left: 0;
       width: 100%;
+      -webkit-backdrop-filter: blur(16px);
       backdrop-filter: blur(16px);
       background: rgba(10, 12, 18, 0.8);
       border-bottom: 1px solid rgba(59, 130, 246, 0.2);
@@ -226,7 +227,8 @@
     }
     .stat-card {
       background: rgba(15, 17, 26, 0.7);
-      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
       border: 1px solid var(--border-dim);
       border-radius: 20px;
       padding: 1rem 1.5rem;
@@ -582,6 +584,7 @@
       cursor: pointer;
       transition: all 0.2s ease;
       font-size: 0.9rem;
+      -webkit-user-select: none;
       user-select: none;
     }
 
@@ -651,6 +654,163 @@
       pointer-events: none;
       z-index: 2;
     }
+
+    /* ---- FLIP CARD ---- */
+    .profile-card-outer {
+      perspective: 1200px;
+      width: 100%;
+      min-height: 380px;
+    }
+
+    .profile-card-3d {
+      width: 100%;
+      min-height: 380px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
+      border-radius: 28px;
+    }
+
+    .profile-card-3d.flipped {
+      transform: rotateY(180deg);
+    }
+
+    /* Front & back share same base */
+    .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      padding: 1.5rem;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border: 1px solid rgba(59,130,246,0.2);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .card-front {
+      background: var(--bg-card);
+    }
+
+    .card-back {
+      background: linear-gradient(135deg, #0f111a, #13101f);
+      transform: rotateY(180deg);
+      border-color: rgba(139,92,246,0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Avatar with real image */
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 2px solid rgba(59,130,246,0.4);
+      box-shadow: 0 0 16px rgba(59,130,246,0.3);
+      flex-shrink: 0;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* fallback if image fails */
+    .avatar-fallback {
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    /* Status dot */
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 6px var(--accent-green);
+      animation: pulse-dot 2s infinite;
+      display: inline-block;
+      margin-right: 6px;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--accent-green); }
+      50% { opacity: 0.6; box-shadow: 0 0 12px var(--accent-green); }
+    }
+
+    /* Back card content */
+    .back-title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      color: var(--accent-secondary);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .back-stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin: 1rem 0;
+    }
+
+    .back-stat {
+      background: rgba(59,130,246,0.08);
+      border: 1px solid rgba(59,130,246,0.15);
+      border-radius: 14px;
+      padding: 0.8rem;
+      text-align: center;
+    }
+
+    .back-stat-num {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent-primary);
+      font-family: var(--font-mono);
+    }
+
+    .back-stat-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .back-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.8rem;
+    }
+
+    .flip-hint {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 1rem;
+      animation: hintFade 3s ease-in-out infinite;
+    }
+
+    @keyframes hintFade {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* Tilt on front face only (when not flipped) */
+    .profile-card-3d:not(.flipped) {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -682,8 +842,8 @@
         <div class="hero-tagline">✦ AI SYSTEMS ENGINEER · CAUSAL INFERENCE · PRODUCTION RL</div>
         <p class="hero-bio">3rd year CompE @ SPPU (9.136 CGPA). I don't ship notebooks — I architect full-stack AI systems with causal rigor, RL optimization, and enterprise-grade backends. 700K+ records, 5-agent pipelines, FPGA accelerators.</p>
         <div class="btn-group">
-          <a href="https://github.com/Viraj281105" target="_blank" class="btn-primary">↗ GitHub Universe</a>
-          <a href="https://www.linkedin.com/in/viraj-jadhao-0771b830b/" target="_blank" class="btn-outline">LinkedIn</a>
+          <a href="https://github.com/Viraj281105" target="_blank" rel="noopener noreferrer" class="btn-primary">↗ GitHub Universe</a>
+          <a href="https://www.linkedin.com/in/viraj-jadhao-0771b830b/" target="_blank" rel="noopener noreferrer" class="btn-outline">LinkedIn</a>
           <a href="mailto:viraj.jadhao28@gmail.com" class="btn-outline">Email →</a>
         </div>
         <div class="stats-grid">
@@ -692,18 +852,122 @@
           <div class="stat-card"><div class="stat-number">5+</div><div>Production AI</div></div>
         </div>
       </div>
-      <div class="profile-card-3d" id="profileCard">
-        <div class="card-header">
-          <div><div style="font-size:12px;color:var(--accent-primary)">Developer Profile</div><div style="font-weight:700">Viraj Jadhao</div><div style="font-size:10px;color:var(--text-muted)">ID · Viraj281105</div></div>
-          <div class="avatar">VJ</div>
-        </div>
-        <div style="display:grid;gap:12px">
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">📍 Location</span><span>Pune, India</span></div>
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">🎓 University</span><span>SPPU · Comp. Eng.</span></div>
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">📅 Graduation</span><span>May 2027</span></div>
-          <div style="height:1px;background:var(--border-dim)"></div>
-          <div><span style="color:var(--accent-primary)">⚡ Current Focus:</span> Causal AI · LLM Reliability · RL Stability</div>
-          <div class="project-tech" style="margin-top:8px"><span class="tech-badge">DoWhy</span><span class="tech-badge">LangGraph</span><span class="tech-badge">PPO/SAC</span><span class="tech-badge">FastAPI</span></div>
+      <div class="profile-card-outer">
+        <div class="profile-card-3d" id="profileCard">
+
+          <!-- FRONT FACE -->
+          <div class="card-face card-front">
+            <div class="card-header">
+              <div>
+                <div style="font-size:11px;color:var(--accent-primary);font-family:var(--font-mono)">Developer Profile</div>
+                <div style="font-weight:700;font-size:1.1rem">Viraj Jadhao</div>
+                <div style="font-size:10px;color:var(--text-muted)">ID · Viraj281105</div>
+              </div>
+              <div class="avatar" id="avatarBox">
+                <img
+                  id="avatarImg"
+                  src="photo.jpg"
+                  alt="Viraj Jadhao"
+                  onerror="
+                    this.src='https://avatars.githubusercontent.com/u/178099410?v=4';
+                    this.onerror=function(){
+                      this.style.display='none';
+                      document.getElementById('avatarFallback').style.display='flex';
+                    };
+                  "
+                />
+                <div class="avatar-fallback" id="avatarFallback" style="display:none">VJ</div>
+                <div class="avatar-fallback" id="avatarFallback" style="display:none">VJ</div>
+              </div>
+            </div>
+
+            <div style="display:grid;gap:12px">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="color:var(--text-muted)">📍 Location</span>
+                <span>Pune, India</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="color:var(--text-muted)">🎓 University</span>
+                <span>SPPU · Comp. Eng.</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="color:var(--text-muted)">🏢 Experience</span>
+                <span style="color:var(--accent-secondary)">GenAI Intern</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="color:var(--text-muted)">📅 Graduation</span>
+                <span>May 2027</span>
+              </div>
+              <div style="height:1px;background:var(--border-dim)"></div>
+              <div>
+                <span class="status-dot"></span>
+                <span style="color:var(--accent-primary);font-size:0.85rem">Currently building:</span>
+                <div style="color:var(--text-secondary);font-size:0.8rem;margin-top:4px">Multi-Agent RAG · Causal AI · LLM Reliability</div>
+              </div>
+              <div class="project-tech" style="margin-top:4px">
+                <span class="tech-badge">DoWhy</span>
+                <span class="tech-badge">LangGraph</span>
+                <span class="tech-badge">FastAPI</span>
+                <span class="tech-badge">Next.js 15</span>
+              </div>
+            </div>
+
+            <div class="flip-hint">hover · tilt &nbsp;|&nbsp; click · flip →</div>
+          </div>
+
+          <!-- BACK FACE -->
+          <div class="card-face card-back">
+            <div>
+              <div class="back-title">✦ By The Numbers</div>
+              <div class="back-stat-grid">
+                <div class="back-stat">
+                  <div class="back-stat-num">9.136</div>
+                  <div class="back-stat-label">CGPA / 10</div>
+                </div>
+                <div class="back-stat">
+                  <div class="back-stat-num">8+</div>
+                  <div class="back-stat-label">Projects Shipped</div>
+                </div>
+                <div class="back-stat">
+                  <div class="back-stat-num">160</div>
+                  <div class="back-stat-label">Teams Directed</div>
+                </div>
+                <div class="back-stat">
+                  <div class="back-stat-num">1K+</div>
+                  <div class="back-stat-label">Students Reached</div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="back-title" style="margin-top:0.5rem">✦ Core Stack</div>
+              <div class="back-tag-row">
+                <span class="tech-badge">LangGraph</span>
+                <span class="tech-badge">DoWhy</span>
+                <span class="tech-badge">FastAPI</span>
+                <span class="tech-badge">Spring Boot</span>
+                <span class="tech-badge">Next.js 15</span>
+                <span class="tech-badge">pgvector</span>
+                <span class="tech-badge">Docker</span>
+                <span class="tech-badge">PyTorch</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="back-title" style="margin-top:0.8rem">✦ Open For</div>
+              <div style="display:flex;flex-direction:column;gap:0.4rem">
+                <div style="font-size:0.8rem;color:var(--text-secondary)"><span style="color:var(--accent-green)">▸</span> AI/ML Internships</div>
+                <div style="font-size:0.8rem;color:var(--text-secondary)"><span style="color:var(--accent-green)">▸</span> SWE / MLE Roles</div>
+                <div style="font-size:0.8rem;color:var(--text-secondary)"><span style="color:var(--accent-green)">▸</span> Research Collaborations</div>
+              </div>
+              <a href="mailto:viraj.jadhao28@gmail.com" style="display:inline-block;margin-top:1rem;background:var(--gradient-1);padding:0.5rem 1.2rem;border-radius:40px;font-size:0.8rem;font-weight:600;color:white;text-decoration:none">
+                Get in Touch →
+              </a>
+            </div>
+
+            <div class="flip-hint">← click to flip back</div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -1169,16 +1433,51 @@
 
   // 3D tilt on profile card
   const card = document.getElementById('profileCard');
+  let isFlipped = false;
+
   if (card) {
+    // Flip on click
+    card.addEventListener('click', () => {
+      isFlipped = !isFlipped;
+      card.classList.toggle('flipped', isFlipped);
+      // disable tilt when flipped
+      card.style.transform = isFlipped ? 'rotateY(180deg)' : '';
+    });
+
+    // Tilt on mousemove (front face only)
     card.addEventListener('mousemove', (e) => {
+      if (isFlipped) return;
       const rect = card.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      card.style.transform = `perspective(1000px) rotateY(${x * 10}deg) rotateX(${y * -8}deg) translateY(-5px)`;
+      card.style.transform = `perspective(1000px) rotateY(${x * 12}deg) rotateX(${y * -10}deg) translateY(-5px)`;
     });
+
     card.addEventListener('mouseleave', () => {
+      if (isFlipped) return;
       card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0px)';
     });
+
+    // Auto-flip once when card scrolls into view (first time only)
+    let autoFlipped = false;
+    const flipObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !autoFlipped) {
+          autoFlipped = true;
+          setTimeout(() => {
+            isFlipped = true;
+            card.classList.add('flipped');
+            // flip back after 1.8s to show both sides
+            setTimeout(() => {
+              isFlipped = false;
+              card.classList.remove('flipped');
+            }, 1800);
+          }, 600);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    flipObserver.observe(card);
   }
 
   // active nav highlight
