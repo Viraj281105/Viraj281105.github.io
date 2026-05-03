@@ -506,6 +506,151 @@
       left: 0;
       color: var(--accent-primary);
     }
+
+    /* Horizontal scroll showcase */
+    .projects-scroll-wrapper {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 3rem;
+    }
+
+    .projects-scroll-track {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 1rem 0.5rem 1.5rem;
+      cursor: grab;
+      transition: transform 0.3s ease;
+    }
+
+    .projects-scroll-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .projects-scroll-track:active {
+      cursor: grabbing;
+    }
+
+    .projects-scroll-track .project-tile {
+      min-width: 320px;
+      max-width: 320px;
+      scroll-snap-align: start;
+      flex-shrink: 0;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    /* Scroll progress indicator */
+    .scroll-progress-bar {
+      width: 100%;
+      height: 3px;
+      background: var(--border-dim);
+      border-radius: 3px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .scroll-progress-fill {
+      height: 100%;
+      background: var(--gradient-1);
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.1s ease;
+    }
+
+    /* Scroll hint arrows */
+    .scroll-nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .scroll-btn {
+      background: var(--surface);
+      border: 1px solid var(--border-dim);
+      color: var(--text-primary);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    .scroll-btn:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      box-shadow: 0 0 10px rgba(59,130,246,0.3);
+    }
+
+    .scroll-hint {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    /* Grid settle animation */
+    .projects-grid.settling {
+      animation: gridSettle 0.6s cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
+    }
+
+    @keyframes gridSettle {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .projects-grid .project-tile {
+      animation: tileSettle 0.4s cubic-bezier(0.2, 0.9, 0.4, 1) both;
+    }
+
+    @keyframes tileSettle {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+      }
+      to {
+        opacity: 1 !important;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* stagger delay for each tile */
+    .projects-grid .project-tile:nth-child(1) { animation-delay: 0.05s; }
+    .projects-grid .project-tile:nth-child(2) { animation-delay: 0.10s; }
+    .projects-grid .project-tile:nth-child(3) { animation-delay: 0.15s; }
+    .projects-grid .project-tile:nth-child(4) { animation-delay: 0.20s; }
+    .projects-grid .project-tile:nth-child(5) { animation-delay: 0.25s; }
+    .projects-grid .project-tile:nth-child(6) { animation-delay: 0.30s; }
+    .projects-grid .project-tile:nth-child(7) { animation-delay: 0.35s; }
+    .projects-grid .project-tile:nth-child(8) { animation-delay: 0.40s; }
+
+    /* fade edge on scroll track */
+    .projects-scroll-wrapper::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 80px;
+      background: linear-gradient(to left, var(--bg-dark), transparent);
+      pointer-events: none;
+      z-index: 2;
+    }
   </style>
 </head>
 <body>
@@ -568,8 +713,27 @@
   <section class="section" id="projects">
     <div class="section-tag">✦ PORTFOLIO</div>
     <div class="section-title">Flagship Engineering</div>
-    <div class="section-desc">production-grade AI systems, causal inference engines, and deep RL from first principles.</div>
-    <div class="projects-grid" id="projectsGrid"></div>
+    <div class="section-desc">Production-grade AI systems, causal inference engines, and multi-agent pipelines.</div>
+
+    <!-- Scroll nav -->
+    <div class="scroll-nav">
+      <button class="scroll-btn" id="scrollLeft">←</button>
+      <button class="scroll-btn" id="scrollRight">→</button>
+      <span class="scroll-hint">scroll through → grid settles when done</span>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="scroll-progress-bar">
+      <div class="scroll-progress-fill" id="scrollProgressFill"></div>
+    </div>
+
+    <!-- Horizontal scroll track -->
+    <div class="projects-scroll-wrapper" id="scrollPhase">
+      <div class="projects-scroll-track" id="projectsScroll"></div>
+    </div>
+
+    <!-- Grid (hidden until scroll complete) -->
+    <div class="projects-grid" id="projectsGrid" style="display:none"></div>
   </section>
 
   <section class="section" id="experience">
@@ -855,9 +1019,12 @@
   ];
 
   function renderProjects() {
-    const container = document.getElementById('projectsGrid');
-    if (!container) return;
-    container.innerHTML = projectsData.map(proj => `
+    const scrollTrack = document.getElementById('projectsScroll');
+    const grid = document.getElementById('projectsGrid');
+    const progressFill = document.getElementById('scrollProgressFill');
+    const scrollPhase = document.getElementById('scrollPhase');
+
+    const cardHTML = projectsData.map(proj => `
       <div class="project-tile ${proj.colorClass}" onclick="window.open('${proj.github}', '_blank')">
         <div class="project-icon">${proj.icon}</div>
         <div class="project-title">${proj.name}</div>
@@ -866,6 +1033,78 @@
         <div class="project-stats"><span>⚡ ${proj.stat}</span></div>
       </div>
     `).join('');
+
+    // populate both scroll track and grid
+    scrollTrack.innerHTML = cardHTML;
+    grid.innerHTML = cardHTML;
+
+    let settled = false;
+
+    function settleToGrid() {
+      if (settled) return;
+      settled = true;
+
+      // fade out scroll phase
+      scrollPhase.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      scrollPhase.style.opacity = '0';
+      scrollPhase.style.transform = 'translateY(8px)';
+
+      // hide scroll nav + progress
+      document.getElementById('scrollLeft').parentElement.style.display = 'none';
+      document.querySelector('.scroll-progress-bar').style.display = 'none';
+
+      setTimeout(() => {
+        scrollPhase.style.display = 'none';
+        grid.style.display = 'grid';
+        grid.classList.add('settling');
+      }, 400);
+    }
+
+    // update progress bar + detect end
+    scrollTrack.addEventListener('scroll', () => {
+      const scrollLeft = scrollTrack.scrollLeft;
+      const maxScroll = scrollTrack.scrollWidth - scrollTrack.clientWidth;
+      const progress = (scrollLeft / maxScroll) * 100;
+      progressFill.style.width = progress + '%';
+
+      // settle when scrolled to within 30px of end
+      if (scrollLeft >= maxScroll - 30) {
+        settleToGrid();
+      }
+    });
+
+    // arrow buttons
+    document.getElementById('scrollLeft').addEventListener('click', () => {
+      scrollTrack.scrollBy({ left: -340, behavior: 'smooth' });
+    });
+    document.getElementById('scrollRight').addEventListener('click', () => {
+      scrollTrack.scrollBy({ left: 340, behavior: 'smooth' });
+      // check if this click reaches the end
+      setTimeout(() => {
+        const maxScroll = scrollTrack.scrollWidth - scrollTrack.clientWidth;
+        if (scrollTrack.scrollLeft >= maxScroll - 30) settleToGrid();
+      }, 400);
+    });
+
+    // drag to scroll on desktop
+    let isDown = false;
+    let startX;
+    let scrollStartLeft;
+
+    scrollTrack.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - scrollTrack.offsetLeft;
+      scrollStartLeft = scrollTrack.scrollLeft;
+    });
+    scrollTrack.addEventListener('mouseleave', () => { isDown = false; });
+    scrollTrack.addEventListener('mouseup', () => { isDown = false; });
+    scrollTrack.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - scrollTrack.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      scrollTrack.scrollLeft = scrollStartLeft - walk;
+    });
   }
 
   function renderSkills() {
