@@ -425,6 +425,87 @@
       transition: 0.2s;
       z-index: 99;
     }
+    .tile-medguard::before { background: linear-gradient(135deg, #ef4444, #f97316); }
+    .tile-climatex::before { background: linear-gradient(135deg, #10b981, #3b82f6); }
+    .tile-hallucination::before { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+    .tile-finguard::before { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+    .tile-floatchat::before { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
+    .tile-multiagent::before { background: linear-gradient(135deg, #8b5cf6, #3b82f6); }
+    .tile-ecg::before { background: linear-gradient(135deg, #ef4444, #8b5cf6); }
+    .tile-causal::before { background: linear-gradient(135deg, #10b981, #8b5cf6); }
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: 2px;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 2rem;
+      background: var(--surface);
+      border: 1px solid var(--border-dim);
+      border-radius: 20px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -2.45rem;
+      top: 1.5rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      border: 2px solid var(--bg-dark);
+      box-shadow: 0 0 8px rgba(59,130,246,0.6);
+    }
+    .timeline-item:hover {
+      border-color: var(--accent-primary);
+      transform: translateX(4px);
+    }
+    .timeline-date {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent-primary);
+      margin-bottom: 0.3rem;
+    }
+    .timeline-role {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+    }
+    .timeline-org {
+      font-size: 0.85rem;
+      color: var(--accent-secondary);
+      margin-bottom: 0.8rem;
+    }
+    .timeline-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .timeline-bullets li {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      padding-left: 1rem;
+      position: relative;
+    }
+    .timeline-bullets li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent-primary);
+    }
   </style>
 </head>
 <body>
@@ -437,6 +518,7 @@
     <div class="nav-links">
       <a href="#hero" class="nav-link active">HOME</a>
       <a href="#projects" class="nav-link">WORK</a>
+      <a href="#experience" class="nav-link">EXP</a>
       <a href="#stack" class="nav-link">STACK</a>
       <a href="#leadership" class="nav-link">LEAD</a>
     </div>
@@ -490,6 +572,47 @@
     <div class="projects-grid" id="projectsGrid"></div>
   </section>
 
+  <section class="section" id="experience">
+    <div class="section-tag">✦ EXPERIENCE</div>
+    <div class="section-title">Industry & Research</div>
+    <div class="section-desc">Hands-on engineering beyond the classroom.</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-date">JAN 2026 – FEB 2026</div>
+        <div class="timeline-role">Generative AI Intern</div>
+        <div class="timeline-org">Prodigy InfoTech · Remote</div>
+        <ul class="timeline-bullets">
+          <li>Fine-tuned GPT-2 on domain-specific corpora using HuggingFace Transformers; implemented N-gram Markov chain text generation from bigram through weighted n-gram, evaluating generative trade-offs</li>
+          <li>Built conditional GAN (U-Net + PatchGAN) for Pix2Pix image-to-image translation on building facade segmentation</li>
+          <li>Implemented Neural Style Transfer via VGG-19 feature optimization; deployed Stable Diffusion for text-to-image synthesis</li>
+          <li>Delivered 5 end-to-end generative AI tasks spanning language modeling and computer vision</li>
+        </ul>
+        <div class="project-tech" style="margin-top:1rem">
+          <span class="tech-badge">GPT-2</span>
+          <span class="tech-badge">Pix2Pix cGAN</span>
+          <span class="tech-badge">Stable Diffusion</span>
+          <span class="tech-badge">Neural Style Transfer</span>
+          <span class="tech-badge">HuggingFace</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">JAN 2026 – MAR 2026</div>
+        <div class="timeline-role">AICTE Virtual Intern</div>
+        <div class="timeline-org">Google AI/ML Program · Remote</div>
+        <ul class="timeline-bullets">
+          <li>Completed structured AI/ML curriculum covering deep learning, NLP, and applied ML systems</li>
+          <li>Worked through hands-on labs on transformer architectures, fine-tuning, and deployment pipelines</li>
+        </ul>
+        <div class="project-tech" style="margin-top:1rem">
+          <span class="tech-badge">Google AI</span>
+          <span class="tech-badge">Deep Learning</span>
+          <span class="tech-badge">NLP</span>
+          <span class="tech-badge">AICTE</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  
   <!-- Tech stack interactive -->
   <section class="section" id="stack">
     <div class="section-tag">✦ TOOLKIT</div>
@@ -584,37 +707,158 @@
 
   // ---- PROJECT DATA (handpicked from github repos)
   const projectsData = [
-    { name: "MedGuard", desc: "5-agent clinical LLM pipeline for medication safety · multi-agent orchestration with LangGraph, hallucination guardrails, hackathon-winning solution.", tech: ["LangGraph", "RAG", "Llama 3", "FastAPI"], github: "https://github.com/Viraj281105/MedGuard", icon: "🩺", stat: "5 agents · realtime" },
-    { name: "ClimateX", desc: "Causal AI platform for policy evaluation: 700K+ records, DAG-based identifiability, do-calculus counterfactuals, ATE/CATE estimation. Built with DoWhy, FastAPI, pgvector.", tech: ["DoWhy", "CausalNex", "FastAPI", "pgvector"], github: "https://github.com/Viraj281105/ClimateX", icon: "🌍", stat: "700K+ rows · causal" },
-    { name: "AI Hallucination Detection", desc: "Production NLI pipeline benchmarking across 5+ LLMs. RoBERTa-large fine-tuned + RAG entailment scoring, >25% reliability improvement. SHAP + probabilistic calibration.", tech: ["RoBERTa", "HuggingFace", "ChromaDB", "SHAP"], github: "https://github.com/Viraj281105/AI-Hallucination-Detection-Application", icon: "🧠", stat: "Precision +25%" },
-    { name: "FloatChat", desc: "NL-to-SQL over 3.5M ARGO floats. Schema-aware translation, PostGIS geospatial queries, live ocean data visualization in React + Plotly.", tech: ["TypeScript", "PostGIS", "pgvector", "React"], github: "https://github.com/Viraj281105/FloatChat", icon: "🌊", stat: "3.5M records" },
-    { name: "Multi-Agent Governance (RL)", desc: "Event-driven financial market simulation using PPO/SAC from scratch. Multi-agent negotiation, Nash bargaining, emergent stability.", tech: ["PPO", "SAC", "LangGraph", "Python"], github: "https://github.com/Viraj281105/Real-Time-Multi-Agent-Governance", icon: "📈", stat: "from-scratch RL" },
-    { name: "FinGuard AI", desc: "Enterprise-grade financial intelligence: LLM SQL generation with governance, security layer, and explainable outputs. (In progress — full stack)", tech: ["LLM", "SQL", "RBAC", "FastAPI"], github: "https://github.com/Viraj281105/sas-fin-intelligence-platform", icon: "🏦", stat: "enterprise" },
-    { name: "ECG FPGA Accelerator", desc: "1D CNN for real-time arrhythmia detection on FPGA. Hardware-accelerated edge AI, low-power streaming inference.", tech: ["FPGA", "1D-CNN", "Python"], github: "https://github.com/Viraj281105/ecg_fpga_accelerator", icon: "⚡", stat: "hackathon 2026" },
-    { name: "AutoStream Agent", desc: "Conversational lead qualification using LangGraph + multi-turn state management. Agentic RAG, production orchestration.", tech: ["LangGraph", "RAG", "FastAPI"], github: "https://github.com/Viraj281105/autostream-agent", icon: "🤖", stat: "agentic" }
+    {
+      name: "MedGuard",
+      colorClass: "tile-medguard",
+      desc: "5-agent sequential pipeline (Document Auditor → Clinical Reviewer → Regulatory Advisor → Appeal Drafter → QA Judge). Parses hospital bills via LayoutLMv3 + EasyOCR, benchmarks against CGHS rates, generates IRDAI-compliant appeal letters in <15 seconds. RAG over IRDAI circulars via FAISS + sentence-transformers, live SSE streaming.",
+      tech: ["LangGraph", "Next.js 15", "FastAPI", "FAISS", "LayoutLMv3", "SSE", "Docker"],
+      github: "https://github.com/Viraj281105/MedGuard",
+      icon: "🏥",
+      stat: "5 agents · <15s · Nexus 2.0 Hackathon"
+    },
+    {
+      name: "ClimateX",
+      colorClass: "tile-climatex",
+      desc: "4-module India climate intelligence platform: real-time AQI + weather maps (IMD/CPCB via Mapbox), DoWhy causal engine for counterfactual policy simulation, RAG over MoEFCC/UN reports, live BERT/RoBERTa sentiment analysis over Twitter + news with state-wise topic clustering.",
+      tech: ["DoWhy", "FastAPI", "pgvector", "BERT", "RoBERTa", "Mapbox", "MongoDB", "Docker"],
+      github: "https://github.com/Viraj281105/ClimateX",
+      icon: "🌍",
+      stat: "700K+ records · causal · hackathon"
+    },
+    {
+      name: "LLM Hallucination Detection",
+      colorClass: "tile-hallucination",
+      desc: "Formulated hallucination as conditional inference — P(entailment | evidence, claim). Fine-tuned DeBERTa NLI classifiers on domain-adapted QA corpora; evaluated ECE calibration across confidence bins. Identified failure modes under retrieval noise and distribution shift. >25% factual reliability improvement across 5+ LLM variants.",
+      tech: ["DeBERTa", "RoBERTa", "HuggingFace", "RAG", "pgvector", "SHAP", "Gradio"],
+      github: "https://github.com/Viraj281105/AI-Hallucination-Detection-Application",
+      icon: "🔍",
+      stat: "5+ LLMs benchmarked · ECE calibrated"
+    },
+    {
+      name: "FinGuard AI",
+      colorClass: "tile-finguard",
+      desc: "Tri-service platform ingesting Indian bank statements from 5 major banks; classifies transactions at 91% accuracy (sentence-transformers + FAISS); computes 5-dimension Financial Risk Index (liquidity, debt burden, volatility, savings stability, investment diversification). Scenario engine with 6–12 month cash flow forecasts.",
+      tech: ["Spring Boot", "FastAPI", "React", "FAISS", "sentence-transformers", "Docker Compose", "Nginx"],
+      github: "https://github.com/Viraj281105/FinGuard-AI",
+      icon: "💰",
+      stat: "91% accuracy · 5 banks · in development"
+    },
+    {
+      name: "FloatChat",
+      colorClass: "tile-floatchat",
+      desc: "Schema-aware NLP-to-SQL engine over 3.5M+ ARGO oceanographic float records. Decoupled API layer separates NL interpretation from SQL execution. Geospatial query execution via PostGIS, dynamic parameter binding, live Plotly visualizations — natural language access to marine datasets.",
+      tech: ["TypeScript", "FastAPI", "PostGIS", "pgvector", "sentence-transformers", "React", "Plotly"],
+      github: "https://github.com/Viraj281105/FloatChat",
+      icon: "🌊",
+      stat: "3.5M records · NL-to-SQL"
+    },
+    {
+      name: "Multi-Agent Governance (RL)",
+      colorClass: "tile-multiagent",
+      desc: "Event-driven multi-agent system where financial market agents propose actions, negotiate conflicts, and self-enforce governance rules using PPO/SAC implemented from first principles. Models Nash bargaining, meritocratic voting, and emergent equilibrium stability under real market data.",
+      tech: ["PPO", "SAC", "FastAPI", "Redis Streams", "Plotly", "Python"],
+      github: "https://github.com/Viraj281105/Real-Time-Multi-Agent-Governance",
+      icon: "📈",
+      stat: "from-scratch RL · Nash bargaining"
+    },
+    {
+      name: "ECG FPGA Accelerator",
+      colorClass: "tile-ecg",
+      desc: "Low-power streaming 1D CNN accelerator for real-time ECG arrhythmia detection on FPGA hardware. Optimized for minimal latency and power budget on embedded inference. Hardware-accelerated deep learning for medical AI.",
+      tech: ["FPGA", "1D-CNN", "TensorFlow Lite", "Python"],
+      github: "https://github.com/Viraj281105/ecg_fpga_accelerator",
+      icon: "💓",
+      stat: "FPGA Hackathon 2026 · edge AI"
+    },
+    {
+      name: "Causal Fairness Auditing",
+      colorClass: "tile-causal",
+      desc: "Framework to audit ML models for direct and indirect discrimination using path-specific counterfactual effects. Distinguishes legitimate from illegitimate causal pathways. Compared counterfactual fairness metrics against statistical parity and equalized odds on Adult Income and COMPAS datasets.",
+      tech: ["DoWhy", "CausalNex", "Python", "scikit-learn", "Pandas"],
+      github: "https://github.com/Viraj281105",
+      icon: "⚖️",
+      stat: "COMPAS · Adult Income · causal fairness"
+    }
   ];
-
-  const techStack = ["Python", "PyTorch", "TensorFlow", "FastAPI", "LangChain", "LangGraph", "DoWhy", "CausalNex", "Ray RLlib", "PostgreSQL", "pgvector", "React", "TypeScript", "Docker", "HuggingFace", "SHAP", "MongoDB", "Redis", "Plotly", "Gradio"];
-
+  
+  const techStack = [
+    // AI & ML
+    "PyTorch", "TensorFlow", "HuggingFace", "LangChain", "LangGraph",
+    "DoWhy", "CausalNex", "FAISS", "pgvector", "sentence-transformers",
+    "Stable Diffusion", "Pix2Pix cGAN", "RAG", "SHAP", "W&B",
+    // Backend
+    "FastAPI", "Spring Boot", "Flask", "Docker", "Docker Compose",
+    "Nginx", "Redis Streams", "SSE Streaming", "JWT Auth",
+    // Frontend
+    "React", "Next.js 15", "TypeScript", "Tailwind CSS",
+    "Framer Motion", "Plotly", "Recharts", "Mapbox", "Gradio", "Streamlit",
+    // Databases
+    "PostgreSQL", "MongoDB", "MySQL", "Redis", "PostGIS",
+    // Languages
+    "Python", "Java", "TypeScript", "C++"
+  ];
+  
   const leadership = [
-    { role: "Vice Chair @ ACM", org: "ACM Student Chapter", impact: "6 workshops, membership growth +40%", color: "blue" },
-    { role: "AI Lead @ Team Vulcans", org: "Robocon / EYRC", impact: "CV pipeline from scratch, mentored 4 juniors", color: "purple" },
-    { role: "Marketing Coordinator", org: "MPulse Tech Fest", impact: "Closed 15+ sponsors, 500+ attendees", color: "green" },
-    { role: "Team Lead @ SIH", org: "Smart India Hackathon", impact: "Multi-team AI prototypes under 36h", color: "amber" }
+    {
+      role: "Hackathon Director",
+      org: "College-Wide · Sole Organizer & SPOC",
+      impact: "160 teams · 500+ participants · end-to-end logistics",
+      icon: "🏆"
+    },
+    {
+      role: "Vice Chair · ACM Student Chapter",
+      org: "Savitribai Phule Pune University",
+      impact: "6+ workshops · 1,000+ students · 10+ external hackathons",
+      icon: "🏛️"
+    },
+    {
+      role: "Sponsorship Lead · MPulse Tech Fest",
+      org: "College Technical Festival",
+      impact: "30+ sponsors · ₹1 lakh+ raised · 500+ attendees",
+      icon: "🎯"
+    },
+    {
+      role: "AI & CV Lead · Team Vulcans",
+      org: "ABU Robocon 2026 · EYRC",
+      impact: "CV pipeline from scratch · mentored 4 juniors · state-level",
+      icon: "🤖"
+    },
+    {
+      role: "Team Lead",
+      org: "SIH · SKNCOE Fusion 2025 · PCCOE IGC",
+      impact: "Multi-disciplinary AI prototypes · consistent top-5/10 finishes",
+      icon: "⚡"
+    }
   ];
-
+  
   const researchInterests = [
-    { title: "Causal Representation Learning", desc: "DAGs, SEMs, backdoor/frontdoor criteria, counterfactual inference.", icon: "🔗" },
-    { title: "LLM Reliability & Hallucination", desc: "Entailment scoring, distribution shift, continual adaptation.", icon: "🔍" },
-    { title: "RL Stability Analysis", desc: "PPO/SAC convergence, clipped surrogate, entropy regularization.", icon: "🎮" },
-    { title: "Robustness under Shift", desc: "Bias–variance decomposition, gradient optimization robustness.", icon: "📊" }
+    {
+      title: "Causal Representation Learning",
+      desc: "SCMs, DAGs, backdoor/frontdoor identifiability, ATE/CATE estimation, Rosenbaum bounds, sensitivity analysis under latent confounding.",
+      icon: "🔗"
+    },
+    {
+      title: "LLM Reliability & Hallucination",
+      desc: "NLI-based entailment scoring, ECE calibration, distribution shift failure modes, continual adaptation mechanisms.",
+      icon: "🔍"
+    },
+    {
+      title: "Multi-Agent Systems",
+      desc: "Sequential agent pipelines with LangGraph, handoff protocols, RAG-grounded reasoning, QA judge patterns.",
+      icon: "🤝"
+    },
+    {
+      title: "RL Stability Analysis",
+      desc: "PPO/SAC convergence from first principles, clipped surrogate objectives, entropy regularization, Nash equilibrium stability.",
+      icon: "🎮"
+    }
   ];
 
   function renderProjects() {
     const container = document.getElementById('projectsGrid');
     if (!container) return;
     container.innerHTML = projectsData.map(proj => `
-      <div class="project-tile" onclick="window.open('${proj.github}', '_blank')">
+      <div class="project-tile ${proj.colorClass}" onclick="window.open('${proj.github}', '_blank')">
         <div class="project-icon">${proj.icon}</div>
         <div class="project-title">${proj.name}</div>
         <div class="project-tech">${proj.tech.map(t => `<span class="tech-badge">${t}</span>`).join('')}</div>
@@ -626,14 +870,28 @@
 
   function renderSkills() {
     const container = document.getElementById('skillsContainer');
-    container.innerHTML = techStack.map(skill => `<div class="skill-pill">${skill}</div>`).join('');
+    const groups = {
+      "🤖 AI & ML": ["PyTorch", "TensorFlow", "HuggingFace", "LangChain", "LangGraph", "DoWhy", "CausalNex", "FAISS", "pgvector", "sentence-transformers", "Stable Diffusion", "RAG", "SHAP", "W&B"],
+      "⚙️ Backend": ["FastAPI", "Spring Boot", "Flask", "Docker", "Docker Compose", "Nginx", "Redis Streams", "SSE Streaming", "JWT Auth"],
+      "🎨 Frontend": ["React", "Next.js 15", "TypeScript", "Tailwind CSS", "Framer Motion", "Plotly", "Recharts", "Mapbox", "Gradio", "Streamlit"],
+      "🗄️ Databases": ["PostgreSQL", "MongoDB", "MySQL", "Redis", "PostGIS"],
+      "💻 Languages": ["Python", "Java", "TypeScript", "C++"]
+    };
+    container.innerHTML = Object.entries(groups).map(([group, skills]) => `
+      <div style="width:100%;margin-bottom:1.5rem">
+        <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--accent-primary);letter-spacing:2px;text-transform:uppercase;margin-bottom:0.8rem">${group}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.6rem">
+          ${skills.map(skill => `<div class="skill-pill">${skill}</div>`).join('')}
+        </div>
+      </div>
+    `).join('');
   }
 
   function renderLeadership() {
     const container = document.getElementById('leadershipGrid');
     container.innerHTML = leadership.map(lead => `
       <div class="project-tile" style="background: radial-gradient(circle at top left, rgba(59,130,246,0.05), transparent)">
-        <div class="project-icon">${lead.role.includes('AI') ? '🤖' : (lead.role.includes('Chair') ? '🏛️' : '🎯')}</div>
+        <div class="project-icon">${lead.icon}</div>
         <div class="project-title">${lead.role}</div>
         <div class="project-desc" style="margin:6px 0">${lead.org}</div>
         <div class="project-stats">📌 ${lead.impact}</div>
